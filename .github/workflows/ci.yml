@@ -57,7 +57,7 @@ jobs:
         run: |-
           function copy_lib {
             mkdir -p lib/$1
-            cp _lib/node_modules/$1/$2 lib/$1/$2
+            cp -r _lib/node_modules/$1/$2 lib/$1/$2
             echo Copied $1/$2
           }
 
