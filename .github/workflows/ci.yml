@@ -54,6 +54,7 @@ jobs:
 
       - name: Install libraries
         shell: bash
+        working-directory: build/docs
         run: |-
           function copy_lib {
             mkdir -p lib/$1
@@ -61,7 +62,7 @@ jobs:
             echo Copied $1/$2
           }
 
-          cd build/docs/_lib
+          cd _lib
           pnpm install
           cd ..
           copy_lib katex LICENSE
@@ -81,15 +82,13 @@ jobs:
 
       - name: Build just-the-docs Search Data
         shell: bash
-        run: |-
-          cd build/docs
-          bundle exec just-the-docs rake search:init
+        working-directory: build/docs
+        run: bundle exec just-the-docs rake search:init
 
       - name: Build jekyll
         shell: bash
-        run: |-
-          cd build/docs
-          bundler exec jekyll build
+        working-directory: build/docs
+        run: bundler exec jekyll build
 
       - name: Deploy to GitHub Pages
         if: success()
