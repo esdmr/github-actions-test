@@ -1,9 +1,15 @@
+gh_edit_link: false
 incremental: false
 lsi: false
 safe: true
+color_scheme: dark
 highlighter: rouge
 theme: just-the-docs
 url: https://esdmr.github.io/github-actions-test/
+
+aux_links:
+  "Open repo in GitHub":
+    - https://github.com/esdmr/github-actions-test/
 
 gist:
   noscript: false

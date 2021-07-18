@@ -19,7 +19,9 @@ jobs:
 
       - name: Copy template to docs
         shell: bash
-        run: cp -r .github/pages-template/* build/docs
+        run: |-
+          cp -r .github/pages-template/* build/docs
+          cp README.md build/docs
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1.77.0
@@ -28,6 +30,12 @@ jobs:
           ruby-version: '2.7'
           bundler: Gemfile.lock
           bundler-cache: true
+
+      - name: Build just-the-docs Search Data
+        shell: bash
+        run: |-
+          cd build/docs
+          bundle exec just-the-docs rake search:init
 
       - name: Build jekyll
         shell: bash
