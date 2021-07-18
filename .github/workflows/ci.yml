@@ -21,7 +21,10 @@ jobs:
         shell: bash
         run: |-
           cp -r .github/pages-template/* build/docs
-          cp README.md build/docs
+          echo '---
+          nav_order: 1
+          ---' > build/docs/index.md
+          cat README.md >> build/docs/index.md
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1.77.0
