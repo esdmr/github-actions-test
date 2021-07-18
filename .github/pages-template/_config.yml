@@ -5,7 +5,7 @@ safe: true
 color_scheme: dark
 highlighter: rouge
 theme: just-the-docs
-url: https://esdmr.github.io/github-actions-test/
+url: https://esdmr.github.io
 baseurl: github-actions-test/
 
 aux_links:
