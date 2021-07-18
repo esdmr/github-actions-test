@@ -96,11 +96,12 @@ jobs:
         with:
           target_branch: gh-pages
           build_dir: build/docs/_site
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           author: ${{ github.event.head_commit.author.name }} <${{ github.event.head_commit.author.email }}>
           jekyll: false
           commit_message: |-
             ${{ github.event.head_commit.message }}
 
-            From commit ${{ github.event.head_commit.url }} at ${{ github.event.head_commit.url }}
+            Original-commit: ${{ github.event.head_commit.url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
