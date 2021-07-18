@@ -30,7 +30,10 @@ jobs:
           bundler-cache: true
 
       - name: Build jekyll
-        run: bundler exec jekyll build
+        shell: bash
+        run: |-
+          cd build/docs
+          bundler exec jekyll build
 
       - name: Deploy to GitHub Pages
         if: success()
