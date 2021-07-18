@@ -4,6 +4,11 @@ on:
   push:
     branches: [master]
 
+env:
+  JOB_NODE_VERSION: 16.x
+  JOB_PNPM_VERSION: "6.9.0"
+  JOB_RUBY_VERSION: "2.7"
+
 jobs:
   lint:
     name: Deploy
@@ -26,11 +31,49 @@ jobs:
           ---' > build/docs/index.md
           cat README.md >> build/docs/index.md
 
-      - name: Setup Ruby
+      - name: Use Node.js ${{ env.JOB_NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.JOB_NODE_VERSION }}
+
+      - name: Use PNPM ${{ env.JOB_PNPM_VERSION }}
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: ${{ env.JOB_PNPM_VERSION }}
+
+      - name: Set PNPM StoreDir
+        run: pnpm config set store-dir ~/.pnpm-store
+
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.OS }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.OS }}-pnpm-
+
+      - name: Install libraries
+        shell: bash
+        run: |-
+          function copy_lib {
+            mkdir -p lib/$1
+            cp _lib/node_modules/$1/$2 lib/$1/$2
+            echo Copied $1/$2
+          }
+
+          cd build/docs/_lib
+          pnpm install
+          cd ..
+          copy_lib katex/dist katex.min.css
+          copy_lib katex/dist katex.min.js
+          copy_lib katex/dist/contrib auto-render.min.js
+          rm -r _lib
+
+      - name: Setup Ruby ${{ env.JOB_RUBY_VERSION }}
         uses: ruby/setup-ruby@v1.77.0
         with:
           working-directory: build/docs
-          ruby-version: '2.7'
+          ruby-version: ${{ env.JOB_RUBY_VERSION }}
           bundler: Gemfile.lock
           bundler-cache: true
 
