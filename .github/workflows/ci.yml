@@ -64,6 +64,8 @@ jobs:
           cd build/docs/_lib
           pnpm install
           cd ..
+          copy_lib katex README.md
+          copy_lib katex LICENSE
           copy_lib katex/dist katex.min.css
           copy_lib katex/dist katex.min.js
           copy_lib katex/dist/contrib auto-render.min.js
