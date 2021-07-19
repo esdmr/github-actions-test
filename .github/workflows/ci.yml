@@ -78,9 +78,10 @@ jobs:
         working-directory: docs
         run: git push origin $JOB_DOCS_BRANCH
 
-  deploy:
-    name: Deploy
+  deploy-docs:
+    name: Deploy Docs
     runs-on: ubuntu-latest
+    needs: update-docs
 
     steps:
       - name: Check GitHub Pages status
