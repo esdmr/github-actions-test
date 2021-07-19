@@ -46,7 +46,7 @@ jobs:
           cat README.md >> build/docs/index.md
 
       - name: Create branch ${{ env.JOB_DOCS_BRANCH }} if non-existent
-        uses: peterjgrainger/action-create-branch@v2
+        uses: peterjgrainger/action-create-branch@v2.0.1
         with:
           branch: ${{ env.JOB_DOCS_BRANCH }}
 
@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - name: Check GitHub Pages status
-        uses: crazy-max/ghaction-github-status@v2
+        uses: crazy-max/ghaction-github-status@v2.2.0
         with:
           pages_threshold: major_outage
 
@@ -163,7 +163,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: success()
-        uses: crazy-max/ghaction-github-pages@v2
+        uses: crazy-max/ghaction-github-pages@v2.5.0
         with:
           target_branch: gh-pages
           build_dir: docs/_site
