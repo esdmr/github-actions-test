@@ -66,8 +66,8 @@ jobs:
 
       - name: Configure git committer
         run: |-
-          git config user.name user.name "$GIT_COMMITTER_NAME"
-          git config user.email user.name "$GIT_COMMITTER_EMAIL"
+          git config --global user.name user.name "$GIT_COMMITTER_NAME"
+          git config --global user.email user.name "$GIT_COMMITTER_EMAIL"
 
       - name: Commit changes
         working-directory: docs
