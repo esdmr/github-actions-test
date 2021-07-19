@@ -9,6 +9,10 @@ env:
   JOB_PNPM_VERSION: "6.9.0"
   JOB_RUBY_VERSION: "2.7"
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   lint:
     name: Deploy
@@ -23,7 +27,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Copy template to docs
-        shell: bash
         run: |-
           cp -r .github/pages-template/* build/docs
           echo '---
@@ -53,7 +56,6 @@ jobs:
             ${{ runner.OS }}-pnpm-
 
       - name: Install libraries
-        shell: bash
         working-directory: build/docs
         run: |-
           function copy_lib {
@@ -81,12 +83,10 @@ jobs:
           bundler-cache: true
 
       - name: Build just-the-docs Search Data
-        shell: bash
         working-directory: build/docs
         run: bundle exec just-the-docs rake search:init
 
       - name: Build jekyll
-        shell: bash
         working-directory: build/docs
         run: bundler exec jekyll build
 
