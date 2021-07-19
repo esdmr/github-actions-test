@@ -2,6 +2,16 @@
 
 blah blah blah.
 
+```js
+// @ts-check
+const some = ["Probably", "Syntax", "Highlighted"].join(' ');
+// code
+123; /abc/g; 3 / -2; Infinity; null; undefined;
+/**
+ * @param {number} value - Document
+ */
+```
+
 | Parameter name | Docs      |
 | -------------- | --------- |
 | A              | aea eae a |
@@ -9,26 +19,12 @@ blah blah blah.
 
 ## Math
 
-### TeX
-
 Block:
 
 $$ \text{Some mathematics in \TeX: } \frac{\tau}{2} = \pi $$
 
-Inline $ \sum^{3}_{i = 4} i! $ math
+Inline $$ \sum^{3}_{i = 4} i! $$ math.
 
-### LaTeX
+Inline-Block:
 
-Block:
-
-\[ \text{Some mathematics in \TeX: } \frac{\tau}{2} = \pi \]
-
-Inline \( \sum^{3}_{i = 4} i! \) math
-
-### LaTeX with double slash
-
-Block:
-
-\\[ \text{Some mathematics in \TeX: } \frac{\tau}{2} = \pi \\]
-
-Inline \\( \sum^{3}_{i = 4} i! \\) math
+\$$ \left( \frac{21}{e}, \pi^2 \right) $$
