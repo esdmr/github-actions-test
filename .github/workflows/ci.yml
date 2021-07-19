@@ -141,7 +141,7 @@ jobs:
           cd _lib
           pnpm install
           cd ..
-          echo "::end-group::"
+          echo "::endgroup::"
           copy_lib katex LICENSE
           copy_lib katex/dist fonts
           copy_lib katex/dist katex.min.css
