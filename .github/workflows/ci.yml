@@ -136,6 +136,13 @@ jobs:
       - name: Copy template to docs
         run: cp -vr master/.github/pages-template/* docs
 
+      - name: Write README to docs
+        run: |-
+          echo '---
+          nav_order: 1
+          ---' >docs/index.md
+          cat master/README.md >>docs/index.md
+
       - name: Use Node.js ${{ env.JOB_NODE_VERSION }}
         uses: actions/setup-node@v2
         with:
