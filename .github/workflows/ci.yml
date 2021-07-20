@@ -105,7 +105,7 @@ jobs:
         working-directory: docs
         run: |-
           git add --all .
-          git commit --author $GIT_AUTHOR_NAME\ <$GIT_AUTHOR_EMAIL> \
+          git commit --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
             --message $JOB_COMMIT_MESSAGE
 
       - name: Push changes
