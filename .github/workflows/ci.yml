@@ -42,7 +42,7 @@ jobs:
         with:
           path: source
 
-      - name: Create branch ${{ env.JOB_DOCS_BRANCH }} if non-existent
+      - name: Create docs branch if non-existent
         uses: esdmr/action-create-branch@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout branch ${{ env.JOB_DOCS_BRANCH }}
+      - name: Checkout docs branch
         uses: actions/checkout@v2
         with:
           ref: ${{ env.JOB_DOCS_BRANCH }}
@@ -136,7 +136,7 @@ jobs:
           ref: master
           path: master
 
-      - name: Checkout branch ${{ env.JOB_DOCS_BRANCH }}
+      - name: Checkout docs branch
         uses: actions/checkout@v2
         with:
           ref: ${{ env.JOB_DOCS_BRANCH }}
