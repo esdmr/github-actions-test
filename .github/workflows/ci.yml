@@ -164,7 +164,7 @@ jobs:
         run: |-
           function copy_lib
             mkdir -vp lib/$argv[1]
-            mv -v _lib/node_modules/$1/$2 lib/$argv[1]/$argv[2]
+            mv -v _lib/node_modules/$argv[1]/$argv[2] lib/$argv[1]/$argv[2]
           end
 
           copy_lib katex LICENSE
@@ -172,7 +172,10 @@ jobs:
           copy_lib katex/dist katex.min.css
           copy_lib katex/dist katex.min.js
           copy_lib katex/dist/contrib auto-render.min.js
-          rm -vr _lib
+
+      - name: Remove installed libraries
+        working-directory: docs
+        run: rm -vr _lib
 
       - name: Setup Ruby ${{ env.JOB_RUBY_VERSION }}
         uses: ruby/setup-ruby@v1.77.0
