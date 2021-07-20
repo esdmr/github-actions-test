@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: ${{ env.JOB_DOCS_BRANCH }}
-          sha: 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+          orphan: true
 
       - uses: octokit/request-action@v2.x
         id: get_latest_release
