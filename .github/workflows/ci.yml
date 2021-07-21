@@ -64,7 +64,9 @@ jobs:
         working-directory: source/build/docs
         run: |-
           for filename in **.md
-            sed -i 1i\ ---\\\nparent:\ ${{env.JOB_CURR_BRANCH}}\\\n--- $filename
+            sed -i "1i ---\\
+            parent: $JOB_CURR_BRANCH\\
+            ---" $filename
           end
 
       - name: Create index for docs
@@ -72,8 +74,11 @@ jobs:
         run: |-
           echo --- >build/docs/index.md
 
-          if test ${{ env.JOB_CURR_BRANCH }} = master
+          if test $JOB_CURR_BRANCH = master
             echo nav_order: 2 >>build/docs/index.md
+          else
+            set releases_match (string match -r '^releases/(\d+)' $JOB_CURR_BRANCH)
+            echo nav_order: (math 10 + $releases_match[2]) >>build/docs/index.md
           end
 
           echo "title: $JOB_CURR_BRANCH
@@ -85,9 +90,9 @@ jobs:
 
       - name: Copy folders to the docs branch
         run: |-
-          rm -vrf docs/${{ env.JOB_CURR_BRANCH }}/
-          mkdir -vp docs/${{ env.JOB_CURR_BRANCH }}/
-          mv -vt docs/${{ env.JOB_CURR_BRANCH }} source/build/docs/*
+          rm -vrf docs/$JOB_CURR_BRANCH/
+          mkdir -vp docs/$JOB_CURR_BRANCH/
+          mv -vt docs/$JOB_CURR_BRANCH source/build/docs/*
 
       - name: Configure git committer
         run: |-
@@ -98,8 +103,7 @@ jobs:
         working-directory: docs
         run: |-
           git add --all .
-          git commit --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
-            --message $JOB_COMMIT_MESSAGE
+          git commit --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" --message $JOB_COMMIT_MESSAGE
 
       - name: Push changes
         working-directory: docs
@@ -119,9 +123,6 @@ jobs:
 
       - name: fish-actions/install-fish
         uses: fish-actions/install-fish@v1.1.0
-
-      - name: Find Current branch
-        run: echo JOB_CURR_BRANCH=(string replace -r '^refs/heads/' '' $GITHUB_REF) >>$GITHUB_ENV
 
       - name: Checkout branch master
         uses: actions/checkout@v2
