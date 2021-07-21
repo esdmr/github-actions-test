@@ -73,7 +73,7 @@ jobs:
           echo --- >build/docs/index.md
 
           if test ${{ env.JOB_CURR_BRANCH }} = master
-            echo nav_order: 1 >>build/docs/index.md
+            echo nav_order: 2 >>build/docs/index.md
           end
 
           echo "title: $JOB_CURR_BRANCH
@@ -141,7 +141,7 @@ jobs:
       - name: Write README to docs
         run: |-
           echo '---
-          nav_order: 2
+          nav_order: 1
           ---' >docs/index.md
           cat master/README.md >>docs/index.md
 
