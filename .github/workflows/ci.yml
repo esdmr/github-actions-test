@@ -65,8 +65,8 @@ jobs:
         run: |-
           for filename in **.md
             sed -i "1i ---\\
-            parent: $JOB_CURR_BRANCH\\
-            ---" $filename
+          parent: $JOB_CURR_BRANCH\\
+          ---" $filename
           end
 
       - name: Create index for docs
