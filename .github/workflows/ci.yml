@@ -195,10 +195,6 @@ jobs:
           bundler: Gemfile.lock
           bundler-cache: true
 
-      - name: Build just-the-docs Search Data
-        working-directory: docs
-        run: bundle exec just-the-docs rake search:init
-
       - name: Build jekyll
         working-directory: docs
         run: bundler exec jekyll build
