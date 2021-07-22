@@ -1,12 +1,11 @@
 name: Documentation
+concurrency: docs
 
 on:
   push:
     branches:
       - master
       - releases/**
-
-concurrency: docs
 
 env:
   GIT_AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
@@ -31,6 +30,9 @@ jobs:
   update:
     name: Update documentation
     runs-on: ubuntu-latest
+
+    outputs:
+      should_skip_deployment: ${{ steps.skip_check.outputs.should_skip }}
 
     steps:
       - name: Install fish
@@ -109,15 +111,6 @@ jobs:
         working-directory: docs
         run: git push origin $JOB_DOCS_BRANCH
 
-  check_workflow:
-    name: Check documentation workflow for duplicates
-    runs-on: ubuntu-latest
-    needs: update
-
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-
-    steps:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@v3.4.0
         with:
@@ -128,12 +121,8 @@ jobs:
   deploy:
     name: Deploy Docs
     runs-on: ubuntu-latest
-
-    needs:
-      - update
-      - check_workflow
-
-    if: success() && needs.check_workflow.outputs.should_skip != 'true'
+    needs: update
+    if: success() && needs.update.outputs.should_skip_deployment != 'true'
 
     steps:
       - name: Check GitHub Pages status
