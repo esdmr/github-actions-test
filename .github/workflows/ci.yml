@@ -1,4 +1,4 @@
-name: Github Pages
+name: Documentation
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
       - releases/**
 
-concurrency: gh-pages
+concurrency: docs
 
 env:
   GIT_AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
@@ -28,15 +28,15 @@ defaults:
     shell: fish {0}
 
 jobs:
-  update-docs:
-    name: Update Docs
+  update:
+    name: Update documentation
     runs-on: ubuntu-latest
 
     steps:
       - name: Install fish
         uses: fish-actions/install-fish@v1.1.0
 
-      - name: Find Current branch
+      - name: Find current branch
         run: echo JOB_CURR_BRANCH=(string replace -r '^refs/heads/' '' $GITHUB_REF) >>$GITHUB_ENV
 
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
         with:
           path: source
 
-      - name: Create docs branch if non-existent
+      - name: Create documentation branch if non-existent
         uses: esdmr/action-create-branch@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,7 +52,7 @@ jobs:
           branch: ${{ env.JOB_DOCS_BRANCH }}
           orphan: true
 
-      - name: Checkout docs branch
+      - name: Checkout documentation branch
         uses: actions/checkout@v2
         with:
           ref: ${{ env.JOB_DOCS_BRANCH }}
@@ -60,7 +60,7 @@ jobs:
 
       # TODO: Build docs somehow to build/docs
 
-      - name: Add Frontmatter for every file in docs
+      - name: Add front-matter for every file
         working-directory: source/build/docs
         run: |-
           for filename in **.md
@@ -69,7 +69,7 @@ jobs:
           ---" $filename
           end
 
-      - name: Create index for docs
+      - name: Create index for documentation
         working-directory: source
         run: |-
           echo --- >build/docs/index.md
@@ -88,7 +88,7 @@ jobs:
 
           From commit [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})" >>build/docs/index.md
 
-      - name: Copy folders to the docs branch
+      - name: Copy folders to the documentation branch
         run: |-
           rm -vrf docs/$JOB_CURR_BRANCH/
           mkdir -vp docs/$JOB_CURR_BRANCH/
@@ -109,11 +109,31 @@ jobs:
         working-directory: docs
         run: git push origin $JOB_DOCS_BRANCH
 
-  deploy-docs:
+  check_workflow:
+    name: Check documentation workflow for duplicates
+    runs-on: ubuntu-latest
+    needs: update
+
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v3.4.0
+        with:
+          cancel_others: true
+          skip_after_successful_duplicate: false
+          concurrent_skipping: outdated_runs
+
+  deploy:
     name: Deploy Docs
     runs-on: ubuntu-latest
-    needs: update-docs
-    if: success()
+
+    needs:
+      - update
+      - check_workflow
+
+    if: success() && needs.check_workflow.outputs.should_skip != 'true'
 
     steps:
       - name: Check GitHub Pages status
