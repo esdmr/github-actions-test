@@ -16,7 +16,6 @@ env:
   JOB_PNPM_VERSION: "6.9.0"
   JOB_RUBY_VERSION: "2.7"
   JOB_DOCS_BRANCH: docs
-  JOB_CURR_BRANCH: unknown
   JOB_COMMIT_MESSAGE: |-
     ${{ github.event.head_commit.message }}
 
@@ -39,7 +38,11 @@ jobs:
         uses: fish-actions/install-fish@v1.1.0
 
       - name: Find current branch
-        run: echo JOB_CURR_BRANCH=(string replace -r '^refs/heads/' '' $GITHUB_REF) >>$GITHUB_ENV
+        run: |-
+          set JOB_CURR_BRANCH (string replace -r '^refs/heads/' '' $GITHUB_REF)
+          echo "JOB_CURR_BRANCH=$JOB_CURR_BRANCH" >>$GITHUB_ENV
+          echo "Current branch is $JOB_CURR_BRANCH"
+
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -69,6 +72,7 @@ jobs:
             sed -i "1i ---\\
           parent: $JOB_CURR_BRANCH\\
           ---" $filename
+            echo "Modified $filename"
           end
 
       - name: Create index for documentation
@@ -76,12 +80,17 @@ jobs:
         run: |-
           echo --- >build/docs/index.md
 
-          if test $JOB_CURR_BRANCH = master
-            echo nav_order: 2 >>build/docs/index.md
-          else
-            set releases_match (string match -r '^releases/(\d+)' $JOB_CURR_BRANCH)
-            echo nav_order: (math 10 + $releases_match[2]) >>build/docs/index.md
-          end
+          set nav_order (
+            if test $JOB_CURR_BRANCH = master
+              echo 2
+            else
+              set releases_match (string match -r '^releases/(\d+)' $JOB_CURR_BRANCH)
+              math 10 + $releases_match[2]
+            end
+          )
+
+          echo "nav_order: $nav_order" >>build/docs/index.md
+          echo "Page order is $nav_order"
 
           echo "title: $JOB_CURR_BRANCH
           has_children: true
@@ -89,17 +98,19 @@ jobs:
           # $JOB_CURR_BRANCH
 
           From commit [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})" >>build/docs/index.md
+          echo "Wrote index.md"
 
       - name: Copy folders to the documentation branch
         run: |-
           rm -vrf docs/$JOB_CURR_BRANCH/
           mkdir -vp docs/$JOB_CURR_BRANCH/
-          mv -vt docs/$JOB_CURR_BRANCH source/build/docs/*
+          mv -v source/build/docs/* docs/$JOB_CURR_BRANCH
 
       - name: Configure git committer
         run: |-
           git config --global user.name user.name $GIT_COMMITTER_NAME
           git config --global user.email user.name $GIT_COMMITTER_EMAIL
+          echo "Git committer is $GIT_COMMITTER_NAME <$GIT_COMMITTER_EMAIL>"
 
       - name: Commit changes
         working-directory: docs
@@ -146,7 +157,7 @@ jobs:
           path: docs
 
       - name: Copy template to docs
-        run: cp -vr master/.github/pages-template/* docs
+        run: mv -v master/.github/pages-template/* docs
 
       - name: Write README to docs
         run: |-
@@ -154,6 +165,7 @@ jobs:
           nav_order: 1
           ---' >docs/index.md
           cat master/README.md >>docs/index.md
+          echo 'Wrote index.md'
 
       - name: Use Node.js ${{ env.JOB_NODE_VERSION }}
         uses: actions/setup-node@v2
