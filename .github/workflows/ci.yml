@@ -43,7 +43,6 @@ jobs:
           echo "JOB_CURR_BRANCH=$JOB_CURR_BRANCH" >>$GITHUB_ENV
           echo "Current branch is $JOB_CURR_BRANCH"
 
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
