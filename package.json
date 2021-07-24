@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#src/*": "./build/*",
+    "#test-util/*": "./build/test/test-util/*"
+  },
+  "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
+    "clean": "rimraf build .nyc_output coverage"
+  },
+  "author": "Saeed M Rad",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=6.9.0"
+  },
+  "devDependencies": {
+    "rimraf": "3.0.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/node": "15.0.1"
+    }
+  }
+}
