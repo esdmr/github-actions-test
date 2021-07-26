@@ -40,8 +40,8 @@ jobs:
       - name: Find current branch
         run: |-
           set JOB_CURR_BRANCH (string replace -r '^refs/heads/' '' $GITHUB_REF)
-          echo "JOB_CURR_BRANCH=$JOB_CURR_BRANCH" >>$GITHUB_ENV
-          echo "Current branch is $JOB_CURR_BRANCH"
+          echo JOB_CURR_BRANCH=$JOB_CURR_BRANCH >>$GITHUB_ENV
+          echo Current branch is $JOB_CURR_BRANCH
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -71,7 +71,7 @@ jobs:
             sed -i "1i ---\\
           parent: $JOB_CURR_BRANCH\\
           ---" $filename
-            echo "Modified $filename"
+            echo Modified $filename
           end
 
       - name: Create index for documentation
@@ -88,8 +88,8 @@ jobs:
             end
           )
 
-          echo "nav_order: $nav_order" >>build/docs/index.md
-          echo "Page order is $nav_order"
+          echo nav_order: $nav_order >>build/docs/index.md
+          echo Page order is $nav_order
 
           echo "title: $JOB_CURR_BRANCH
           has_children: true
@@ -97,7 +97,7 @@ jobs:
           # $JOB_CURR_BRANCH
 
           From commit [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})" >>build/docs/index.md
-          echo "Wrote index.md"
+          echo Wrote index.md
 
       - name: Copy folders to the documentation branch
         run: |-
@@ -164,7 +164,7 @@ jobs:
           nav_order: 1
           ---' >docs/index.md
           cat master/README.md >>docs/index.md
-          echo 'Wrote index.md'
+          echo Wrote index.md
 
       - name: Use Node.js ${{ env.JOB_NODE_VERSION }}
         uses: actions/setup-node@v2
