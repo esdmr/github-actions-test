@@ -46,7 +46,7 @@ jobs:
             echo Branches to update: $remote_branches
             echo ::endgroup::
 
-            if count $remote_branches
+            if count $remote_branches >/dev/null
               echo ::group::Checkout
               git clone --no-checkout https://github.com/${{ github.repository }} target
               cd target
