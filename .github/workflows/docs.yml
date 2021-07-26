@@ -62,7 +62,28 @@ jobs:
           ref: ${{ env.JOB_DOCS_BRANCH }}
           path: docs
 
-      # TODO: Build docs somehow to build/docs
+      - name: Use Node.js ${{ env.JOB_NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.JOB_NODE_VERSION }}
+
+      - name: Use PNPM ${{ env.JOB_PNPM_VERSION }}
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: ${{ env.JOB_PNPM_VERSION }}
+
+      - name: Set PNPM StoreDir
+        run: pnpm config set store-dir ~/.pnpm-store
+
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.OS }}-pnpm-${{ hashFiles('source/pnpm-lock.yaml') }}
+
+      - name: Build documentation
+        working-directory: source
+        run: fish .github/scripts/build-docs.fish
 
       - name: Add front-matter for every file
         working-directory: source/build/docs
@@ -107,9 +128,9 @@ jobs:
 
       - name: Configure git committer
         run: |-
-          git config --global user.name user.name $GIT_COMMITTER_NAME
-          git config --global user.email user.name $GIT_COMMITTER_EMAIL
-          echo "Git committer is $GIT_COMMITTER_NAME <$GIT_COMMITTER_EMAIL>"
+          git config --global user.name $GIT_COMMITTER_NAME
+          git config --global user.email $GIT_COMMITTER_EMAIL
+          echo Git committer is $GIT_COMMITTER_NAME <$GIT_COMMITTER_EMAIL>
 
       - name: Commit changes
         working-directory: docs
