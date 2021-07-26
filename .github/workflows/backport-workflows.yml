@@ -6,9 +6,9 @@ on:
     branches:
       - master
     paths:
-      - .github/ISSUE_TEMPLATE
-      - .github/workflows
-      - .github/pages-template
+      - .github/ISSUE_TEMPLATE/**
+      - .github/workflows/**
+      - .github/pages-template/**
       # .github/scripts is intentionally not included.
 
 env:
