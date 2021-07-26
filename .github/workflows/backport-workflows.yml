@@ -39,12 +39,6 @@ jobs:
           with:
             path: source
 
-        - name: Configure git committer
-          run: |-
-            git config --global user.name $GIT_COMMITTER_NAME
-            git config --global user.email $GIT_COMMITTER_EMAIL
-            echo Git committer is $GIT_COMMITTER_NAME <$GIT_COMMITTER_EMAIL>
-
         - name: Checkout target
           run: |-
             git clone --no-checkout https://github.com/${{ github.repository }} target

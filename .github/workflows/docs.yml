@@ -126,12 +126,6 @@ jobs:
           mkdir -vp docs/$JOB_CURR_BRANCH/
           mv -v source/build/docs/* docs/$JOB_CURR_BRANCH
 
-      - name: Configure git committer
-        run: |-
-          git config --global user.name $GIT_COMMITTER_NAME
-          git config --global user.email $GIT_COMMITTER_EMAIL
-          echo Git committer is $GIT_COMMITTER_NAME <$GIT_COMMITTER_EMAIL>
-
       - name: Commit changes
         working-directory: docs
         run: |-
