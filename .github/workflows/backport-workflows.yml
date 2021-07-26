@@ -39,18 +39,23 @@ jobs:
           with:
             path: source
 
-        - name: Checkout target
-          run: |-
-            git clone --no-checkout https://github.com/${{ github.repository }} target
-            cd target
-            git fetch
-
         - name: Backport to all branches
           run: |-
             echo ::group::Find remote branches under releases
             set remote_branches (git ls-remote https://github.com/${{ github.repository }} 'refs/heads/releases/*' | awk '{ gsub(/^refs\/heads\//, "", $2); print $2 }')
             echo Branches to update: $remote_branches
             echo ::endgroup::
+
+            if count $remote_branches
+              echo ::group::Checkout
+              git clone --no-checkout https://github.com/${{ github.repository }} target
+              cd target
+              git fetch
+              echo ::endgroup::
+            else
+              echo No branch exists to update!
+              exit
+            end
 
             for branch in $remote_branches
               echo ::group::Backport to $branch
@@ -65,7 +70,7 @@ jobs:
             end
 
             if count $remote_branches >/dev/null
+              echo ::group::Push all branches
               git push origin --all
-            else
-              echo No branch exists to update!
+              echo ::endgroup::
             end
