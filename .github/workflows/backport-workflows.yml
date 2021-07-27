@@ -69,8 +69,6 @@ jobs:
               echo ::endgroup::
             end
 
-            if count $remote_branches >/dev/null
-              echo ::group::Push all branches
-              git push origin --all
-              echo ::endgroup::
-            end
+            echo ::group::Push all branches
+            git push origin --all
+            echo ::endgroup::
