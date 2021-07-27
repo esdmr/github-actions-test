@@ -47,7 +47,7 @@ jobs:
             echo ::endgroup::
 
             if count $remote_branches >/dev/null
-              echo ::group::Checkout
+              echo ::group::Clone
               git clone --no-checkout https://github.com/${{ github.repository }} target
               cd target
               git fetch
