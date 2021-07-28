@@ -43,15 +43,17 @@ jobs:
           run: |-
             echo ::group::Find remote branches under releases
             set remote_branches (git ls-remote https://github.com/${{ github.repository }} 'refs/heads/releases/*' | awk '{ gsub(/^refs\/heads\//, "", $2); print $2 }')
-            echo Branches to update: $remote_branches
-            echo ::endgroup::
+            and echo Branches to update: $remote_branches
+            and echo ::endgroup::
+            or  exit 1
 
             if count $remote_branches >/dev/null
               echo ::group::Clone
               git clone --no-checkout https://github.com/${{ github.repository }} target
-              cd target
-              git fetch
-              echo ::endgroup::
+              and cd target
+              and git fetch
+              and echo ::endgroup::
+              or  exit 1
             else
               echo No branch exists to update!
               exit
@@ -61,14 +63,16 @@ jobs:
               echo ::group::Backport to $branch
               git checkout -b $branch -t origin/$branch
 
-              mkdir -vp .github
-              cp -vr ../source/.github/{ISSUE_TEMPLATE,workflows,pages-template} .github
+              and mkdir -vp .github
+              and cp -vr ../source/.github/{ISSUE_TEMPLATE,workflows,pages-template} .github
 
-              git add --all .
-              git commit --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" --message $JOB_COMMIT_MESSAGE
-              echo ::endgroup::
+              and git add --all .
+              and git commit --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" --message $JOB_COMMIT_MESSAGE
+              and echo ::endgroup::
+              or  exit 1
             end
 
             echo ::group::Push all branches
             git push origin --all
-            echo ::endgroup::
+            and echo ::endgroup::
+            or  exit 1
