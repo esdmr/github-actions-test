@@ -29,7 +29,7 @@ jobs:
             find . -name "$fileglob" | string replace -r '^./' ''
           end
 
-          set failed_files (fish_indent -c (glob '*.fish'))
+          set failed_files (fish_indent -c (glob '*.fish') 2>&1)
           set fish_indent_status $status
 
           for filename in $failed_files
