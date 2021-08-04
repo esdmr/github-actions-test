@@ -74,18 +74,12 @@ jobs:
           orphan: true
 
       - name: Checkout to master
-        run: git clone $JOB_REPO_URL master
+        run: |-
+          git clone -n $JOB_REPO_URL
+          git checkout --detach master
 
       - name: Checkout to source and documentation
         run: source master/.github/scripts/docs/checkout.fish
-
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v2
-        with:
-          name: debug
-          path: debug.tar.xz
-
-      - run: exit 1
 
       # Setup after checkout:
       - name: Cache pnpm modules
