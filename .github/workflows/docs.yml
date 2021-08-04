@@ -51,12 +51,6 @@ jobs:
       - name: Setup pnpm store-dir
         run: pnpm config set store-dir ~/.pnpm-store/source/
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store/source/
-          key: ${{ runner.OS }}-pnpm-source-${{ hashFiles('source/pnpm-lock.yaml') }}
-
       - name: Setup git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,6 +75,16 @@ jobs:
 
       - name: Checkout to master
         run: git clone $JOB_REPO_URL master
+
+      - name: Checkout to source and documentation
+        run: source master/.github/scripts/docs/checkout.fish
+
+      # Setup after checkout:
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store/source/
+          key: ${{ runner.OS }}-pnpm-source-${{ hashFiles('source/pnpm-lock.yaml') }}
 
       # update
       - name: Update documentation
