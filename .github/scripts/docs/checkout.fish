@@ -27,14 +27,20 @@ begin
 end
 
 begin
-    group Sanity test
-    assert groupcmd test -f source/pnpm-lock.yaml
-    set -l pages_lockfiles master/.github/pages-template/**/pnpm-lock.yaml
-    assert groupcmd test (count $pages_lockfiles) -gt 0
-
-    for file in pages_lockfiles
-        assert groupcmd test -f $file
-    end
-
+    group DEBUG
+    assert groupcmd tar cvf debug.tar.xz *
     endgroup
 end
+
+# begin
+#     group Sanity test
+#     assert groupcmd test -f source/pnpm-lock.yaml
+#     set -l pages_lockfiles master/.github/pages-template/**/pnpm-lock.yaml
+#     assert groupcmd test (count $pages_lockfiles) -gt 0
+
+#     for file in pages_lockfiles
+#         assert groupcmd test -f $file
+#     end
+
+#     endgroup
+# end

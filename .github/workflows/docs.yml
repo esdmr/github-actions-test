@@ -79,6 +79,14 @@ jobs:
       - name: Checkout to source and documentation
         run: source master/.github/scripts/docs/checkout.fish
 
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug
+          path: debug.tar.xz
+
+      - run: exit 1
+
       # Setup after checkout:
       - name: Cache pnpm modules
         uses: actions/cache@v2
