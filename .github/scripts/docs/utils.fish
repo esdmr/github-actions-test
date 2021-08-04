@@ -2,7 +2,7 @@
 # correctly. This is temporary solution at the moment.
 #
 # See: https://github.com/actions/runner/issues/241
-set -gx TERM "xterm-256color"
+set -gx TERM xterm-256color
 
 function print-stack-trace
     echo # Empty line
