@@ -85,7 +85,6 @@ jobs:
         with:
           path: ~/.pnpm-store/source/
           key: ${{ runner.OS }}-pnpm-source-${{ hashFiles('source/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.OS }}-pnpm-${{ hashFiles('source/pnpm-lock.yaml') }}
 
       - name: Cache pnpm modules for template libraries
         uses: actions/cache@v2
