@@ -94,13 +94,17 @@ begin
     groupcmd git add .
     or fail Failed to add all the changes to the documentation branch.
 
-    groupcmd git commit \
-        --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
-        --message "$JOB_COMMIT_MESSAGE"
-    or fail Failed to commit the changes to the documentation branch.
+    if git diff -q --cached
+        echo Nothing to commit.
+    else
+        groupcmd git commit \
+            --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
+            --message "$JOB_COMMIT_MESSAGE"
+        or fail Failed to commit the changes to the documentation branch.
 
-    groupcmd git push origin "$JOB_DOCS_BRANCH"
-    or fail Failed to push the changes to the remote.
+        groupcmd git push origin "$JOB_DOCS_BRANCH"
+        or fail Failed to push the changes to the remote.
+    end
 
     assert popd
     endgroup
