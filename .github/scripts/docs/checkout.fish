@@ -22,7 +22,7 @@ begin
     set -l pages_lockfiles master/.github/pages-template/**/pnpm-lock.yaml
     assert groupcmd test (count $pages_lockfiles) -gt 0
 
-    for file in pages_lockfiles
+    for file in $pages_lockfiles
         assert groupcmd test -f $file
     end
 
