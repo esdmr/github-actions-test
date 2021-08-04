@@ -57,7 +57,7 @@ end
 
 function assert
     $argv
-    or if test $argv[0] == 'groupcmd'
+    or if test $argv[1] == groupcmd
         fail Command failed.
     else
         fail Failed to run command: \
