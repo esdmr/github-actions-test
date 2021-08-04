@@ -39,7 +39,7 @@ function set_color_like -a type -a message
         case str STR
             set_color_of (string escape -- "$message") yellow
         case \*
-			echo >&2 # Empty line
+            echo >&2 # Empty line
             echo (set_color_like fail FAIL) Invalid message type: \
                 (set_color_like str "$type") >&2
 
