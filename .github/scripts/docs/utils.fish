@@ -55,13 +55,23 @@ function fail
     end
 end
 
+function set_status -a target_status
+    return $target_status
+end
+
 function assert
     $argv
-    or if test $argv[1] = groupcmd
-        fail Command failed.
-    else
-        fail Failed to run command: \
-            (string escape -- $argv | string join ' ' | fish_indent --ansi)
+    or begin
+        set -l command_status $status
+
+        if test $argv[1] = groupcmd
+            set_status $command_status
+            fail Command failed.
+        else
+            set_status $command_status
+            fail Failed to run command: \
+                (string escape -- $argv | string join ' ' | fish_indent --ansi)
+        end
     end
 end
 
