@@ -57,8 +57,12 @@ end
 
 function assert
     $argv
-    or fail Failed to run command: \
-        (string escape -- $argv | string join ' ' | fish_indent --ansi)
+    or if test $argv[0] == 'groupcmd'
+        fail Command failed.
+    else
+        fail Failed to run command: \
+            (string escape -- $argv | string join ' ' | fish_indent --ansi)
+    end
 end
 
 function group
