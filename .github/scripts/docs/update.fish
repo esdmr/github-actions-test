@@ -94,7 +94,7 @@ begin
     groupcmd git add .
     or fail Failed to add all the changes to the documentation branch.
 
-    if git diff -q --cached
+    if groupcmd git diff --quiet --cached
         echo Nothing to commit.
     else
         groupcmd git commit \
