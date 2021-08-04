@@ -36,7 +36,7 @@ jobs:
     steps:
       # Setup
       - name: Install fish
-        uses: fish-actions/install-fish@v1.1.0
+        uses: fish-actions/install-fish@d6d9d26231a15f8d9a6b3e74b3db45512440e3e8
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -44,7 +44,7 @@ jobs:
           node-version: ${{ env.JOB_NODE_VERSION }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.0.1
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: ${{ env.JOB_PNPM_VERSION }}
 
@@ -57,9 +57,22 @@ jobs:
           path: ~/.pnpm-store/source/
           key: ${{ runner.OS }}-pnpm-source-${{ hashFiles('source/pnpm-lock.yaml') }}
 
+      - name: Setup git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |-
+          git config --global user.name $GIT_COMMITTER_NAME
+          git config --global user.email $GIT_COMMITTER_EMAIL
+
+          echo "
+          machine github.com
+          login $GITHUB_REPOSITORY
+          password $GITHUB_TOKEN
+          " >~/.netrc
+
       # Checkout
       - name: Create documentation branch if non-existent
-        uses: esdmr/action-create-branch@master
+        uses: esdmr/action-create-branch@931fd05414aa48d6e7b065db6da8d84dd427f480
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -69,14 +82,14 @@ jobs:
       - name: Checkout to master
         run: git clone $JOB_REPO_URL master
 
-      # build
-      - name: Build
+      # update
+      - name: Update documentation
         run: source master/.github/scripts/docs/update.fish
 
       # Deploy
       - name: Check for a concurrenct workflow
         id: skip_check
-        uses: fkirc/skip-duplicate-actions@v3.4.0
+        uses: fkirc/skip-duplicate-actions@f75dd6564bb646f95277dc8c3b80612e46a4a1ea
         with:
           cancel_others: true
           skip_after_successful_duplicate: false
@@ -84,7 +97,7 @@ jobs:
 
       - name: Check GitHub Pages status
         if: success() && steps.skip_check.outputs.should_skip != 'true'
-        uses: crazy-max/ghaction-github-status@v2.2.0
+        uses: crazy-max/ghaction-github-status@4cbc955e79062f29eacbd60fb9bdd4a888b7853a
         with:
           pages_threshold: major_outage
 
@@ -103,7 +116,7 @@ jobs:
 
       - name: Setup Ruby
         if: success() && steps.skip_check.outputs.should_skip != 'true'
-        uses: ruby/setup-ruby@v1.77.0
+        uses: ruby/setup-ruby@0c7e9c4d53d534e2c72b5b06535a3817d6d39fe1
         with:
           working-directory: docs
           ruby-version: ${{ env.JOB_RUBY_VERSION }}
@@ -116,7 +129,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: success() && steps.skip_check.outputs.should_skip != 'true'
-        uses: crazy-max/ghaction-github-pages@v2.5.0
+        uses: crazy-max/ghaction-github-pages@db4476a01402e1a7ce05f41832040eef16d14925
         with:
           target_branch: gh-pages
           build_dir: docs/_site

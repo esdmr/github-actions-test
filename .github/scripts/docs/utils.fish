@@ -1,18 +1,8 @@
-function group
-    echo "::group::$argv"
-end
-
-function endgroup
-    echo ::endgroup::
-end
-
-function groupcmd
-    group Run: (string escape -- $argv)
-    $argv
-    set -l cmd_status $status
-    endgroup
-    return $cmd_status
-end
+# Although GitHub workflows support colors, the environment is not set
+# correctly. This is temporary solution at the moment.
+#
+# See: https://github.com/actions/runner/issues/241
+set -gx TERM "xterm-256color"
 
 function print-stack-trace
     echo # Empty line
@@ -27,7 +17,9 @@ function print-stack-trace
 end
 
 function set_color_of -a message
-    echo -n (set_color $argv[2..])"$message"(set_color normal)
+    set_color $argv[2..]
+    echo -n $message
+    set_color normal
 end
 
 function set_color_like -a type -a message
@@ -38,6 +30,8 @@ function set_color_like -a type -a message
             set_color_of "$message" brred
         case str STR
             set_color_of (string escape -- "$message") yellow
+        case run RUN
+            set_color_of " $message " -or yellow
         case \*
             echo >&2 # Empty line
             echo (set_color_like fail FAIL) Invalid message type: \
@@ -65,6 +59,21 @@ function assert
     $argv
     or fail Failed to run command: \
         (string escape -- $argv | string join ' ' | fish_indent --ansi)
+end
+
+function group
+    echo "::group::$argv"
+end
+
+function endgroup
+    echo ::endgroup::
+end
+
+function groupcmd
+    echo (set_color_like run RUN) \
+        (string escape -- $argv | string join ' ' | fish_indent --ansi)
+
+    $argv
 end
 
 if not set -q GITHUB_ACTIONS
