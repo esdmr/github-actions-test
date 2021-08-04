@@ -49,7 +49,7 @@ jobs:
           version: ${{ env.JOB_PNPM_VERSION }}
 
       - name: Setup pnpm store-dir
-        run: pnpm config set store-dir ~/.pnpm-store/source/
+        run: pnpm config set store-dir ~/.pnpm-store/current/
 
       - name: Setup git
         env:
@@ -79,15 +79,15 @@ jobs:
           and cd master
           and git checkout --detach master
 
-      - name: Checkout to source and documentation
+      - name: Checkout to current and documentation branch
         run: source master/.github/scripts/docs/checkout.fish
 
       # Setup after checkout:
       - name: Cache pnpm modules
         uses: actions/cache@v2
         with:
-          path: ~/.pnpm-store/source/
-          key: ${{ runner.OS }}-pnpm-source-${{ hashFiles('source/pnpm-lock.yaml') }}
+          path: ~/.pnpm-store/current/
+          key: ${{ runner.OS }}-pnpm-current-${{ hashFiles('current/pnpm-lock.yaml') }}
 
       - name: Cache pnpm modules for template libraries
         uses: actions/cache@v2

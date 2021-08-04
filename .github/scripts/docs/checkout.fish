@@ -18,8 +18,7 @@ end
 
 begin
     group Sanity test
-    find . -not -name .git -or -name .git -prune
-    assert groupcmd test -f source/pnpm-lock.yaml
+    assert groupcmd test -f current/pnpm-lock.yaml
     set -l pages_lockfiles master/.github/pages-template/**/pnpm-lock.yaml
     assert groupcmd test (count $pages_lockfiles) -gt 0
 
