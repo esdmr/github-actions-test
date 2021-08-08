@@ -103,5 +103,9 @@ if not set -q JOB_CURR_BRANCH
         (set_color_like str 'refs/heads/**')
 
     echo Current branch is "$JOB_CURR_BRANCH."
+    set -l releases_match (string match -ir '^releases/(\d+)' $JOB_CURR_BRANCH)
+    and set -gx JOB_CURR_RELEASE $releases_match[2]
+    and echo Current release is "$JOB_CURR_RELEASE."
+
     endgroup
 end

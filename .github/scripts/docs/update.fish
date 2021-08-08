@@ -25,16 +25,10 @@ end
 
 begin
     group Create index for branch
-
-    set nav_order (
-        if test "$JOB_CURR_BRANCH" = master
-            echo 2
-        else
-            math 10 + (string match -r '^releases/(\d+)' "$JOB_CURR_BRANCH")[2]
-        end
-    )
-
-    echo Page order is "$nav_order"
+    set -l nav_order 3
+    set -q JOB_CURR_RELEASE
+    and set nav_order (math "10 + $JOB_CURR_RELEASE")
+    echo Page order is "$nav_order."
 
     echo "---
 nav_order: $nav_order

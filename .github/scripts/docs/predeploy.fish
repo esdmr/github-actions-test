@@ -27,6 +27,21 @@ nav_order: 1
 end
 
 begin
+    group Write LICENSE
+
+    echo '---
+nav_order: 2
+permalink: /LICENSE
+---
+```' >docs/license.md
+
+    assert cat master/LICENSE >>docs/license.md
+    echo '```' >>docs/license.md
+    echo Wrote index.md
+    endgroup
+end
+
+begin
     group Install libraries
     assert pnpm install --dir docs/_lib
     endgroup
