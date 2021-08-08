@@ -31,7 +31,6 @@ begin
 
     echo '---
 nav_order: 2
-permalink: /LICENSE
 ---
 ```' >docs/license.md
 
