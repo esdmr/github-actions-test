@@ -32,6 +32,8 @@ begin
     echo '---
 nav_order: 2
 ---
+# License
+
 ```' >docs/license.md
 
     assert cat master/LICENSE >>docs/license.md
