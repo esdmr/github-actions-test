@@ -4,7 +4,6 @@ concurrency: docs
 on:
   push:
     branches:
-      - master
       - releases/**
 
 env:
