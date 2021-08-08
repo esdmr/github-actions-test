@@ -37,8 +37,7 @@ has_children: true
 ---
 # $JOB_CURR_BRANCH
 
-From commit [$JOB_COMMIT_ORIGINAL_ID]($JOB_COMMIT_ORIGINAL_URL)" \
-        >current/build/docs/index.md
+From commit [$JOB_COMMIT_ORIGINAL_ID]($JOB_COMMIT_ORIGINAL_URL)" >current/build/docs/index.md
     echo Wrote index.md
     endgroup
 end
