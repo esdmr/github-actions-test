@@ -50,7 +50,7 @@ jobs:
       - name: Setup pnpm store-dir
         run: pnpm config set store-dir ~/.pnpm-store/current/
 
-      - name: Setup git
+      - name: Setup Git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |-
