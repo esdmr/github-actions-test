@@ -25,7 +25,7 @@ end
 
 begin
     group Create index for branch
-    set -l nav_order 3
+    set -l nav_order 5
     set -q JOB_CURR_RELEASE
     and set nav_order (math "10 + $JOB_CURR_RELEASE")
     echo Page order is "$nav_order."
