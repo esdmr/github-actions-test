@@ -22,30 +22,30 @@ function set_color_of -a message
     set_color normal
 end
 
-function set_color_like -a type -a message
-    switch "$type"
-        case fail FAIL
-            set_color_of " $message " -or red
-        case var VAR
-            set_color_of "$message" brred
-        case str STR
-            set_color_of (string escape -- "$message") yellow
-        case run RUN
-            set_color_of " $message " -or yellow
-        case \*
-            echo >&2 # Empty line
-            echo (set_color_like fail FAIL) Invalid message type: \
-                (set_color_like str "$type") >&2
+function set_color_fail
+    set_color_of " $argv " -or red
+end
 
-            print-stack-trace >&2
-            exit 1
-    end
+function set_color_warn
+    set_color_of " $argv " -or yellow
+end
+
+function set_color_info
+    set_color_of " $argv " -or blue
+end
+
+function set_color_var
+    set_color_of "$argv" brred
+end
+
+function set_color_str
+    set_color_of (string escape -- "$argv") yellow
 end
 
 function fail
     set -l command_status $status
     echo >&2 # Empty line
-    echo (set_color_like fail FAIL) $argv >&2
+    echo (set_color_fail FAIL) $argv >&2
     print-stack-trace >&2
 
     if test $command_status -eq 0
@@ -53,6 +53,15 @@ function fail
     else
         exit $command_status
     end
+end
+
+function warn
+    set -l command_status $status
+    echo >&2 # Empty line
+    echo (set_color_warn WARN) $argv >&2
+    echo >&2 # Empty line
+
+    return $command_status
 end
 
 function set_status -a target_status
@@ -84,7 +93,7 @@ function endgroup
 end
 
 function groupcmd
-    echo (set_color_like run RUN) \
+    echo (set_color_info RUN) \
         (string escape -- $argv | string join ' ' | fish_indent --ansi) >&2
 
     $argv
@@ -98,9 +107,9 @@ if not set -q JOB_CURR_BRANCH
     group Find current branch
 
     set -gx JOB_CURR_BRANCH (string replace -ir '^refs/heads/' '' "$GITHUB_REF")
-    or fail Variable (set_color_like var '$GITHUB_REF') is not properly setup. \
+    or fail Variable (set_color_var '$GITHUB_REF') is not properly setup. \
         This script assumes that it follows the pattern: \
-        (set_color_like str 'refs/heads/**')
+        (set_color_str 'refs/heads/**')
 
     echo Current branch is "$JOB_CURR_BRANCH."
     set -l releases_match (string match -ir '^releases/(\d+)' $JOB_CURR_BRANCH)

@@ -14,7 +14,7 @@ begin
         sed -i "1i ---\\
 parent: $JOB_CURR_BRANCH\\
 ---" $filename
-        or fail Failed to add front-matter for file: (set_color_like str $filename)
+        or fail Failed to add front-matter for file: (set_color_str $filename)
 
         echo Modified $filename
     end

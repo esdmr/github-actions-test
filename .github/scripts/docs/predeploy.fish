@@ -2,7 +2,7 @@ source (status dirname)/utils.fish
 
 function copy_lib -a path -a name
     mkdir -vp docs/lib/$path
-    or fail Failed to create directory: (set_color_like str $path)
+    or fail Failed to create directory: (set_color_str $path)
 
     mv -vf docs/_lib/node_modules/$path/$name docs/lib/$path/$name
     or fail Failed to copy into the target directory
