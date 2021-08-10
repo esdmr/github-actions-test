@@ -44,7 +44,7 @@ end
 
 function fail
     set -l command_status $status
-    echo # Empty line
+    echo >&2 # Empty line
     echo (set_color_like fail FAIL) $argv >&2
     print-stack-trace >&2
 
@@ -85,7 +85,7 @@ end
 
 function groupcmd
     echo (set_color_like run RUN) \
-        (string escape -- $argv | string join ' ' | fish_indent --ansi)
+        (string escape -- $argv | string join ' ' | fish_indent --ansi) >&2
 
     $argv
 end
