@@ -1,6 +1,57 @@
 source (status dirname)/utils.fish
 
 begin
+    group Prune deleted branches from the documentation branch
+    assert pushd docs
+
+    # _index.txt file is a list containing every branch in the remote during the
+    # last invocation of the CI, terminated by new lines (U+000A line feed, this
+    # includes a final line feed).
+
+    if test ! -f _index.txt
+        warn Index not found. Pruning the entire documentation branch. \
+            This might be undesirable. If so, please revert this change and \
+            manually create and populate an (set_color_str _index.txt) \
+            file.
+
+        groupcmd git rm -rf '*'
+        or fail Failed to remove every file.
+
+        assert groupcmd touch _index.txt
+
+        groupcmd git add .
+        or fail Failed to add all the changes.
+
+        groupcmd git commit --message 'Prune the entire branch'
+        or fail Failed to commit all the changes.
+
+        echo Added an empty index.
+    end
+
+    for branch in (comm -13 (git for-each-ref --format='%(refname:strip=3)' \
+        refs/remotes/origin/ | sort | psub) (cat _index.txt | sort | psub))
+
+        echo Pruning "$branch…"
+
+        groupcmd git rm -rf "$branch"
+        or fail Failed to remove the directory.
+
+        set -l tmpfile (assert mktemp)
+        assert cat _index.txt | string match -aev "$branch" >$tmpfile
+        assert cat $tmpfile >_index.txt
+
+        groupcmd git add .
+        or fail Failed to add all the changes.
+
+        groupcmd git commit --message "Prune deleted branch $branch"
+        or fail Failed to commit all the changes.
+    end
+
+    assert popd
+    endgroup
+end
+
+begin
     group Build
     assert env --chdir=current fish .github/scripts/docs/build.fish
     endgroup
@@ -54,6 +105,9 @@ begin
     groupcmd mv -vf current/build/docs/* "docs/$JOB_CURR_BRANCH"
     or fail Failed to move the documentation to the documentation branch
 
+    echo $JOB_CURR_BRANCH | groupcmd sort -o docs/_index.txt -um - docs/_index.txt
+    or fail Failed to add branch to index.
+
     endgroup
 end
 
@@ -70,10 +124,10 @@ begin
             --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
             --message "$JOB_COMMIT_MESSAGE"
         or fail Failed to commit the changes to the documentation branch.
-
-        groupcmd git push origin "$JOB_DOCS_BRANCH"
-        or fail Failed to push the changes to the remote.
     end
+
+    groupcmd git push origin "$JOB_DOCS_BRANCH"
+    or fail Failed to push the changes to the remote.
 
     assert popd
     endgroup
