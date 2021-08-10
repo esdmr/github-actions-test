@@ -1,5 +1,13 @@
 source (status dirname)/utils.fish
 
+function git-commit-skip-empty
+    if groupcmd git diff --quiet --cached
+        echo Nothing to commit.
+    else
+        groupcmd git commit $argv
+    end
+end
+
 begin
     group Prune deleted branches from the documentation branch
     assert pushd docs
@@ -22,7 +30,7 @@ begin
         groupcmd git add .
         or fail Failed to add all the changes.
 
-        groupcmd git commit --message 'Prune the entire branch'
+        git-commit-skip-empty --message 'Prune the entire branch'
         or fail Failed to commit all the changes.
 
         echo Added an empty index.
@@ -43,7 +51,7 @@ begin
         groupcmd git add .
         or fail Failed to add all the changes.
 
-        groupcmd git commit --message "Prune deleted branch $branch"
+        git-commit-skip-empty --message "Prune deleted branch $branch"
         or fail Failed to commit all the changes.
     end
 
@@ -117,14 +125,10 @@ begin
     groupcmd git add .
     or fail Failed to add all the changes to the documentation branch.
 
-    if groupcmd git diff --quiet --cached
-        echo Nothing to commit.
-    else
-        groupcmd git commit \
-            --author "$JOB_AUTHOR_NAME <$JOB_AUTHOR_EMAIL>" \
-            --message "$JOB_COMMIT_MESSAGE"
-        or fail Failed to commit the changes to the documentation branch.
-    end
+    git-commit-skip-empty \
+        --author "$JOB_AUTHOR_NAME <$JOB_AUTHOR_EMAIL>" \
+        --message "$JOB_COMMIT_MESSAGE"
+    or fail Failed to commit the changes to the documentation branch.
 
     groupcmd git push origin docs
     or fail Failed to push the changes to the remote.
