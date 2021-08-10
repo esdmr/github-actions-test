@@ -2,6 +2,6 @@ source (status dirname)/utils.fish
 # TODO: Build docs to build/docs
 exit
 
-assert pnpm i
-assert pnpm run build
-assert pnpm run build-docs
+assert groupcmd pnpm i
+assert groupcmd pnpm run build
+assert groupcmd pnpm run build-docs
