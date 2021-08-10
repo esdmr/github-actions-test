@@ -121,7 +121,7 @@ begin
         echo Nothing to commit.
     else
         groupcmd git commit \
-            --author "$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>" \
+            --author "$JOB_AUTHOR_NAME <$JOB_AUTHOR_EMAIL>" \
             --message "$JOB_COMMIT_MESSAGE"
         or fail Failed to commit the changes to the documentation branch.
     end
