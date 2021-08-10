@@ -122,9 +122,7 @@ begin
     else
         groupcmd git commit \
             --author "$JOB_AUTHOR_NAME <$JOB_AUTHOR_EMAIL>" \
-            --message "$JOB_COMMIT_MESSAGE
-
-Original-Commit: $JOB_COMMIT_ID"
+            --message "$JOB_COMMIT_MESSAGE"
         or fail Failed to commit the changes to the documentation branch.
     end
 
