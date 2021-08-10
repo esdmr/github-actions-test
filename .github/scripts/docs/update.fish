@@ -122,11 +122,13 @@ begin
     else
         groupcmd git commit \
             --author "$JOB_AUTHOR_NAME <$JOB_AUTHOR_EMAIL>" \
-            --message "$JOB_COMMIT_MESSAGE"
+            --message "$JOB_COMMIT_MESSAGE
+
+Original-Commit: $JOB_COMMIT_ID"
         or fail Failed to commit the changes to the documentation branch.
     end
 
-    groupcmd git push origin "$JOB_DOCS_BRANCH"
+    groupcmd git push origin docs
     or fail Failed to push the changes to the remote.
 
     assert popd

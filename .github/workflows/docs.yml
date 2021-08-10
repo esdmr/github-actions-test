@@ -14,14 +14,10 @@ env:
   JOB_NODE_VERSION: 16.x
   JOB_PNPM_VERSION: 6
   JOB_RUBY_VERSION: 2.7
-  JOB_DOCS_BRANCH: docs
   JOB_COMMIT_ORIGINAL_ID: ${{ github.event.head_commit.id }}
   JOB_COMMIT_ORIGINAL_URL: ${{ github.event.head_commit.url }}
+  JOB_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   JOB_REPO_URL: https://github.com/${{ github.repository }}
-  JOB_COMMIT_MESSAGE: |-
-    ${{ github.event.head_commit.message }}
-
-    Original-commit: ${{ github.event.head_commit.url }}
 
 defaults:
   run:
@@ -69,7 +65,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: ${{ env.JOB_DOCS_BRANCH }}
+          branch: docs
           orphan: true
 
       - name: Checkout to master

@@ -9,8 +9,7 @@ begin
     or fail Could not setup a Git worktree for the current branch.
 
     # Checkout to the documentation branch
-    groupcmd git worktree add -b "$JOB_DOCS_BRANCH" ../docs \
-        "origin/$JOB_DOCS_BRANCH"
+    groupcmd git worktree add -b docs ../docs origin/docs
     or fail Could not setup a Git worktree for the documentation branch.
 
     assert popd
