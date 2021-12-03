@@ -4,5 +4,5 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@6.20.3"
+  "packageManager": "pnpm@6.23.5"
 }
