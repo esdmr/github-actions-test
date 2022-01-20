@@ -1,0 +1,67 @@
+# This workflow will do a clean install of node dependencies, build the source
+# code and run lints and tests.
+
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      - releases/**
+
+env:
+  JOB_NODE_VERSION: 16.x
+  JOB_PNPM_VERSION: 6
+
+jobs:
+  lint:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # renovate: tag=v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2 # renovate: tag=v2
+        with:
+          node-version: ${{ env.JOB_NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.0.1 # renovate: tag=v2.0.1
+        with:
+          version: ${{ env.JOB_PNPM_VERSION }}
+
+      - name: Set pnpm store-dir
+        run: pnpm config set store-dir ~/.pnpm-store
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2 # renovate: tag=v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.OS }}-pnpm-current-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.OS }}-pnpm-current
+
+      - name: Install packages
+        run: echo pnpm install
+
+      - name: Build
+        run: echo pnpm run build
+
+      - name: Run linter
+        run: echo pnpm run lint
+
+      - name: Run tests
+        run: echo pnpm run test:coverage
+
+      - name: Export coverage report
+        run: echo pnpm run test:coverage-lcov
+
+      - name: Upload report to CodeCov
+        uses: codecov/codecov-action@v2 # renovate: tag=v2
+        with:
+          files: ./coverage/lcov.info
