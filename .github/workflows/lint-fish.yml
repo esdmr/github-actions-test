@@ -1,7 +1,6 @@
 name: Lint fish scripts
 
-permissions:
-  contents: none
+permissions: {}
 
 on:
   push:
