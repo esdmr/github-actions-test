@@ -25,7 +25,8 @@ jobs:
       - run: corepack npm ci
       - run: corepack npx gulp local
       - run: corepack npm pack
-      - run: mv typescript-*.tgz typescript.tgz
+      - run: mv typescript-*.tgz typescript.tar.gz
+      - run: gunzip typescript.tar.gz
       - uses: actions/upload-artifact@v3
         with:
-          path: typescript.tgz
+          path: typescript.tar
