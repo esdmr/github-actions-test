@@ -22,8 +22,10 @@ jobs:
         with:
           node-version: '16'
           cache: npm
-      - run: npm ci
-      - run: npx gulp local
+      - run: corepack npm ci
+      - run: corepack npx gulp local
+      - run: corepack npm pack
+      - run: mv typescript-*.tgz typescript.tgz
       - uses: actions/upload-artifact@v3
         with:
-          path: built/local
+          path: typescript.tgz
