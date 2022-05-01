@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const fs = require('fs');
+const fs = require('node:fs');
 
 const packageMeta = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
