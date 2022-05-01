@@ -1,0 +1,14 @@
+name: Get runtime versions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: node .github/get-versions.cjs
+        id: versions
+      - run: echo Node.JS is ${{ steps.versions.outputs.node }}
+      - run: echo PNPM is ${{ steps.versions.outputs.pnpm }}
