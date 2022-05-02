@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: node .github/get-versions.cjs
+      - run: node .github/get-versions.js
         id: versions
       - run: echo Node.JS is ${{ steps.versions.outputs.node }}
       - run: echo PNPM is ${{ steps.versions.outputs.pnpm }}
