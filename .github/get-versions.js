@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const fs = require('node:fs');
+import { readFile } from 'node:fs/promises';
 
-const packageMeta = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const packageMeta = JSON.parse(await readFile('package.json', 'utf8'));
 
 if (typeof packageMeta !== 'object' || packageMeta === null) {
 	throw new TypeError('::error::Invalid package json');
