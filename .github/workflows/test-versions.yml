@@ -12,3 +12,6 @@ jobs:
         id: versions
       - run: echo Node.JS is ${{ steps.versions.outputs.node }}
       - run: echo PNPM is ${{ steps.versions.outputs.pnpm }}
+      - run: corepack pnpm --version
+      - run: corepack enable
+      - run: pnpm --version
