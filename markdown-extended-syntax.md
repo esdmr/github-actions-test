@@ -68,13 +68,13 @@ This is ==Highlighted==.
 
 ## Subscript
 
-H~2~O.
+H~2~O. H_2_O. $\text{H}_2\text{O}$.
 
 ## Superscript
 
 x^2^yz x^2^yz.
 
-x^2yz x^2yz.
+x^2yz x^2yz. $x^2yz$
 
 ## Autolink
 
