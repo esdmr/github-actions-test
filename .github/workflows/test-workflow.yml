@@ -1,0 +1,26 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir build
+      - run: echo "Hello, World!" >build/index.txt
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: build
+          path: build
+
+      - run: ls .
+      - run: ls build
+      - run: cat build/index.txt
