@@ -19,6 +19,7 @@ jobs:
           npm init -y
           npm i which
       - run: console.log(require('which').sync(process.env.EXEC_NAME))
-        shell: node {0}
+        shell: cp {0} index.js
+      - run: node index.js
         env:
           EXEC_NAME: ${{ github.event.inputs.name }}
