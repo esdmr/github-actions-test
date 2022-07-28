@@ -1,0 +1,22 @@
+name: Text Executable
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: The executable to check for.
+        required: true
+        type: string
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: npm i -g which
+      - run: console.log(require('which').sync(process.env.EXEC_NAME))
+        shell: node {0}
+        env:
+          EXEC_NAME: ${{ github.event.inputs.name }}
