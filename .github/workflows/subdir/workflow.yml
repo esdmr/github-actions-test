@@ -1,0 +1,32 @@
+name: Build TS
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: The branch, tag or SHA to checkout.
+        default: main
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          persist-credentials: false
+          repository: microsoft/TypeScript
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: npm
+      - run: corepack npm ci
+      - run: corepack npx gulp local
+      - run: corepack npm pack
+      - run: mv typescript-*.tgz typescript.tar.gz
+      - run: gunzip typescript.tar.gz
+      - uses: actions/upload-artifact@v3
+        with:
+          path: typescript.tar
