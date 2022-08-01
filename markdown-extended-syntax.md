@@ -192,3 +192,15 @@ No really, it did!
 
 </p>
 </details>
+
+## Info Callouts
+
+> **Note**: abcdef
+
+> **Warning**: abcdef
+
+> **Note**
+> abcdef
+
+> **Warning**
+> abcdef
