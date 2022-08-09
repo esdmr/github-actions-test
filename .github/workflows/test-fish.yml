@@ -26,19 +26,19 @@ jobs:
           mkdir .fish-bin
           echo "$(pwd)/.fish-bin" >> $GITHUB_PATH
 
-      - name: Cache pnpm modules
+      - name: Cache fish build
         uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
         with:
           path: .fish-bin
           key: ${{ runner.OS }}-fish-${{ matrix.fishTag }}-${{ matrix.fishFile }}
 
-      - name: Build pnpm
+      - name: Build fish
         run: |-
-          if test -f .fish-bin/fish
+          if test -f .fish-bin/fish; then
             cd .fish-bin
             chmod +x fish fish_indent fish_key_reader
             exit
-          end
+          fi
 
           sudo apt install build-essential cmake ncurses-dev libncurses5-dev libpcre2-dev gettext
 
