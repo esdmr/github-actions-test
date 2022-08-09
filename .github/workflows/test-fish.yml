@@ -14,8 +14,34 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - fishTag: 3.5.1
-            fishFile: fish-3.5.1.tar.xz
+          - fishTag: 3.5.0
+            fishFile: fish-3.5.0.tar.xz
+          - fishTag: 3.4.0
+            fishFile: fish-3.4.0.tar.xz
+          - fishTag: 3.3.0
+            fishFile: fish-3.3.0.tar.xz
+          - fishTag: 3.2.0
+            fishFile: fish-3.2.0.tar.xz
+          - fishTag: 3.1.0
+            fishFile: fish-3.1.0.tar.gz
+          - fishTag: 3.0.0
+            fishFile: fish-3.0.0.tar.gz
+          - fishTag: 2.7.0
+            fishFile: fish-2.7.0.tar.gz
+          - fishTag: 2.6.0
+            fishFile: fish-2.6.0.tar.gz
+          - fishTag: 2.5.0
+            fishFile: fish-2.5.0.tar.gz
+          - fishTag: 2.4.0
+            fishFile: fish-2.4.0.tar.gz
+          - fishTag: 2.3.0
+            fishFile: fish-2.3.0.tar.gz
+          - fishTag: 2.2.0
+            fishFile: fish-2.2.0.tar.gz
+          - fishTag: 2.1.0
+            fishFile: fish-2.1.0.tar.gz
+          - fishTag: 2.0.0
+            fishFile: fish-2.0.0.tar.gz
 
     runs-on: ubuntu-latest
     name: Fish ${{ matrix.fishTag }} (${{ matrix.fishFile }})
