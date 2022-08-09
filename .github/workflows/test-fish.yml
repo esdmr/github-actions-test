@@ -14,24 +14,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - fishTag: 3.5.0
-          #   fishFile: fish-3.5.0.tar.xz
-          #   fishMajor: 3
-          # - fishTag: 3.4.0
-          #   fishFile: fish-3.4.0.tar.xz
-          #   fishMajor: 3
-          # - fishTag: 3.3.0
-          #   fishFile: fish-3.3.0.tar.xz
-          #   fishMajor: 3
-          # - fishTag: 3.2.0
-          #   fishFile: fish-3.2.0.tar.xz
-          #   fishMajor: 3
-          # - fishTag: 3.1.0
-          #   fishFile: fish-3.1.0.tar.gz
-          #   fishMajor: 3
-          # - fishTag: 3.0.0
-          #   fishFile: fish-3.0.0.tar.gz
-          #   fishMajor: 3
+          - fishTag: 3.5.0
+            fishFile: fish-3.5.0.tar.xz
+            fishMajor: 3
+          - fishTag: 3.4.0
+            fishFile: fish-3.4.0.tar.xz
+            fishMajor: 3
+          - fishTag: 3.3.0
+            fishFile: fish-3.3.0.tar.xz
+            fishMajor: 3
+          - fishTag: 3.2.0
+            fishFile: fish-3.2.0.tar.xz
+            fishMajor: 3
+          - fishTag: 3.1.0
+            fishFile: fish-3.1.0.tar.gz
+            fishMajor: 3
+          - fishTag: 3.0.0
+            fishFile: fish-3.0.0.tar.gz
+            fishMajor: 3
           - fishTag: 2.7.0
             fishFile: fish-2.7.0.tar.gz
             fishMajor: 2
@@ -49,12 +49,6 @@ jobs:
             fishMajor: 2
           - fishTag: 2.2.0
             fishFile: fish-2.2.0.tar.gz
-            fishMajor: 2
-          - fishTag: 2.1.0
-            fishFile: fish-2.1.0.tar.gz
-            fishMajor: 2
-          - fishTag: 2.0.0
-            fishFile: fish-2.0.0.tar.gz
             fishMajor: 2
 
     runs-on: ubuntu-latest
