@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+(
+	fish -c 'echo TEST1_STRING'
+	echo echo TEST3_STRING | fish -iC 'echo TEST2_STRING'
+	echo fish -C \'echo TEST5_STRING\' | fish -iC 'echo TEST4_STRING'
+	echo fish -C \'echo TEST6_STRING\' | fish -i
+) >test.log
+
+cat test.log
+
+grep TEST1_STRING test.log &&
+	grep TEST2_STRING test.log &&
+	grep TEST3_STRING test.log &&
+	grep TEST4_STRING test.log &&
+	grep TEST5_STRING test.log &&
+	grep TEST6_STRING test.log
