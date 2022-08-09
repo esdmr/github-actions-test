@@ -40,7 +40,6 @@ elif test "$FISH_MAJOR" -eq "2"; then
 	./configure || exit 7
 	make || exit 9
 	mv fish fish_indent ../.fish-bin || exit 10
-	mv fish_key_reader ../.fish-bin
 else
 	echo Version "$FISH_MAJOR" unknown.
 	exit 5
