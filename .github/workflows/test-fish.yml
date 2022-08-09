@@ -1,0 +1,66 @@
+name: Test fish scripts
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_name:
+        description: Path to executable script
+        type: string
+        required: true
+
+jobs:
+  test-fish:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - fishTag: 3.5.1
+            fishFile: fish-3.5.1.tar.xz
+
+    runs-on: ubuntu-latest
+    name: Fish ${{ matrix.fishTag }} (${{ matrix.fishFile }})
+
+    steps:
+      - name: Make installation directory
+        run: |-
+          mkdir .fish-bin
+          echo (pwd)/.fish-bin >> $GITHUB_PATH
+
+      - name: Cache pnpm modules
+        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        with:
+          path: .fish-bin
+          key: ${{ runner.OS }}-fish-${{ matrix.fishTag }}-${{ matrix.fishFile }}
+
+      - name: Build pnpm
+        run: |-
+          if test -f .fish-bin/fish
+            cd .fish-bin
+            chmod +x fish fish_indent fish_key_reader
+            exit
+          end
+
+          sudo apt install build-essential cmake ncurses-dev libncurses5-dev libpcre2-dev gettext
+
+          wget "https://github.com/fish-shell/fish-shell/releases/download/$FISH_TAG/$FISH_FILE" || exit
+          tar xf "$FISH_FILE" || exit
+          test -d "fish-$FISH_TAG" || exit
+
+          cd "fish-$FISH_TAG"
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+          mv fish fish_indent fish_key_reader ../../.fish-bin
+        env:
+          FISH_TAG: ${{ matrix.fishTag }}
+          FISH_FILE: ${{ matrix.fishFile }}
+
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+        with:
+          path: .repo
+
+      - name: Test
+        run: ./.repo/fish-tests/${{ github.event.inputs.test_name }}
