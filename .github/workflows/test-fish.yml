@@ -63,4 +63,6 @@ jobs:
           path: .repo
 
       - name: Test
-        run: ./.repo/fish-tests/${{ github.event.inputs.test_name }}
+        run: |-
+          chmod +x .repo/fish-tests/${{ github.event.inputs.test_name }}
+          ./.repo/fish-tests/${{ github.event.inputs.test_name }}
