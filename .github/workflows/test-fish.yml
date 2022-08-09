@@ -24,7 +24,7 @@ jobs:
       - name: Make installation directory
         run: |-
           mkdir .fish-bin
-          echo (pwd)/.fish-bin >> $GITHUB_PATH
+          echo "$(pwd)/.fish-bin" >> $GITHUB_PATH
 
       - name: Cache pnpm modules
         uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
