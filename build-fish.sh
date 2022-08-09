@@ -2,7 +2,12 @@
 
 if test -f .fish-bin/fish; then
 	cd .fish-bin
-	chmod +x fish fish_indent fish_key_reader
+	chmod +x fish fish_indent
+
+	if test "$FISH_MAJOR" -eq "3"; then
+		chmod +x fish_key_reader
+	fi
+
 	exit
 fi
 
