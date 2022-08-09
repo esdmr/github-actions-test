@@ -82,10 +82,18 @@ jobs:
 
           wget "https://github.com/fish-shell/fish-shell/releases/download/$FISH_TAG/$FISH_FILE" || exit 1
           tar xf "$FISH_FILE" || exit 2
-          ls
-          test -d "fish-$FISH_TAG" || exit 3
 
-          cd "fish-$FISH_TAG" || exit 4
+          if test -d "fish-$FISH_TAG"; then
+            echo Directory: "fish-$FISH_TAG"
+            cd "fish-$FISH_TAG" || exit 4
+          elif test -d fish; then
+            echo Directory: fish
+            cd fish || exit 4
+          else
+            echo Directory not found.
+            ls
+            exit 4
+          end
 
           if test "$FISH_MAJOR" -eq "3"; then
             echo v3 detected
