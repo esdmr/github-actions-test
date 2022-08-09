@@ -82,6 +82,7 @@ jobs:
 
           wget "https://github.com/fish-shell/fish-shell/releases/download/$FISH_TAG/$FISH_FILE" || exit 1
           tar xf "$FISH_FILE" || exit 2
+          ls
           test -d "fish-$FISH_TAG" || exit 3
 
           cd "fish-$FISH_TAG" || exit 4
