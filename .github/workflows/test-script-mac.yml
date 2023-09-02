@@ -4,10 +4,17 @@ on:
   - workflow_dispatch
 
 jobs:
-  test:
+  test-mac:
     runs-on: macos-latest
     steps:
       - run: echo 'test file' >/tmp/test.txt
       - run: script -q /dev/null sh -c 'cat $_TEMP_FILE'
+        env:
+          _TEMP_FILE: /tmp/test.txt
+  test-lin:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'test file' >/tmp/test.txt
+      - run: script -e -q -c 'sh -c '\''cat $_TEMP_FILE'\' /dev/null
         env:
           _TEMP_FILE: /tmp/test.txt
