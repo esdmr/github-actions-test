@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "18"
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Install packages
+        run: npm install
+
+      - name: Build
+        run: npm run build:wasm
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tree-sitter-fish.wasm
+          path: tree-sitter-fish.wasm
